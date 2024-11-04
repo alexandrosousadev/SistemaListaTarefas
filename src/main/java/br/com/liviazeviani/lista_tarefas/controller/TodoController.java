@@ -3,7 +3,6 @@ package br.com.liviazeviani.lista_tarefas.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.liviazeviani.lista_tarefas.entity.Todo;
-import br.com.liviazeviani.lista_tarefas.service.TodoService;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -20,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
-    private TodoService todoService;
+    private br.com.liviazeviani.lista_tarefas.service.TodoService todoService;
 
-    public TodoController(TodoService todoService) {
+    public TodoController(br.com.liviazeviani.lista_tarefas.service.TodoService todoService) {
         this.todoService = todoService;
     }
 

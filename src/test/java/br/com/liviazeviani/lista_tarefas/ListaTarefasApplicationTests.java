@@ -20,61 +20,57 @@ class ListaTarefasApplicationTests {
 		var todo = new Todo("nome", "description", false, 2);
 
 		webTestClient
-		.post()
-		.uri("/todos")
-		.bodyValue(todo)
-		.exchange()
-		.expectStatus().isOk()
-		.expectBody()
-		.jsonPath("$").isArray()
-		.jsonPath("$.length()").isEqualTo(1)
-		.jsonPath("$[0].name").isEqualTo(todo.getName())
-		.jsonPath("$[0].description").isEqualTo(todo.getDescription())
-		.jsonPath("$[0].realized").isEqualTo(todo.isRealized())
-		.jsonPath("$[0].priorization").isEqualTo(todo.getPriorization());
-
+				.post()
+				.uri("/todos")
+				.bodyValue(todo)
+				.exchange()
+				.expectStatus().isOk()
+				.expectBody()
+				.jsonPath("$").isArray()
+				.jsonPath("$.length()").isEqualTo(1)
+				.jsonPath("$[0].name").isEqualTo(todo.getName())
+				.jsonPath("$[0].description").isEqualTo(todo.getDescription())
+				.jsonPath("$[0].realized").isEqualTo(todo.isRealized())
+				.jsonPath("$[0].priorization").isEqualTo(todo.getPriorization());
 	}
 
 	@Test
 	void testCreateTodoFailure() {
 		webTestClient
-		.post().uri("/todos")
-		.bodyValue(new Todo(
-			 "",
-			"",
-			false,
-			0))
-			.exchange()
-			.expectStatus().isBadRequest();
-
+				.post().uri("/todos")
+				.bodyValue(new Todo(
+						"",
+						"",
+						false,
+						0))
+				.exchange()
+				.expectStatus().isBadRequest();
 	}
 
 	@Test
-void testDeleteTodoSuccess() {
-    
-    Todo todo = new Todo("name", "description", false, 5);
+	void testDeleteTodoSuccess() {
+		Todo todo = new Todo("name", "description", false, 5);
 
-    Todo createdTodo = webTestClient.post()
-            .uri("/todos")
-            .bodyValue(todo)
-            .exchange()
-            .expectStatus().isOk()
-            .expectBody(Todo.class)
-            .returnResult().getResponseBody();
+		Todo createdTodo = webTestClient.post()
+				.uri("/todos")
+				.bodyValue(todo)
+				.exchange()
+				.expectStatus().isOk()
+				.expectBody(Todo.class)
+				.returnResult().getResponseBody();
 
-    assertNotNull(createdTodo);
-    Long todoId = createdTodo.getId();
-    assertNotNull(todoId);
+		assertNotNull(createdTodo);
+		Long todoId = createdTodo.getId();
+		assertNotNull(todoId);
 
-    webTestClient.delete()
-            .uri("/todos/{id}", todoId)
-            .exchange()
-            .expectStatus().isOk();
+		webTestClient.delete()
+				.uri("/todos/{id}", todoId)
+				.exchange()
+				.expectStatus().isOk();
 
-    webTestClient.get()
-            .uri("/todos/{id}", todoId)
-            .exchange()
-            .expectStatus().isNotFound();
-}
-
+		webTestClient.get()
+				.uri("/todos/{id}", todoId)
+				.exchange()
+				.expectStatus().isNotFound();
+	}
 }
